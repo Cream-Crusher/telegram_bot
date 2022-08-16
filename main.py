@@ -18,10 +18,9 @@ async def main(new_attempts, token, chat_id):
 
 def work_result(new_attempts):
     if new_attempts['is_negative'] is True:
-        result = 'Приступайте к следующему уроку'
+        return 'Приступайте к следующему уроку'
     else:
-        result = 'В работе присутствуют ошибки'
-    return result
+        return 'В работе присутствуют ошибки'
 
 
 if __name__ == '__main__':
