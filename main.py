@@ -12,11 +12,12 @@ async def main(new_attempts, token, chat_id):
     result = work_result(new_attempts)
 
     async with bot:
-        await bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id)
+        await bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
+            new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id)
 
 
 def work_result(new_attempts):
-    if new_attempts['is_negative'] == True:
+    if new_attempts['is_negative'] is True:
         result = 'Приступайте к следующему уроку'
     else:
         result = 'В работе присутствуют ошибки'
