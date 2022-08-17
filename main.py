@@ -59,6 +59,7 @@ if __name__ == '__main__':
     try:
         while True:
             response_details = requests.get(url, headers=headers, params=params, timeout=60).json()
+            print(response_details)
             get_request_status(response_details)
             new_verification_attempt = response_details['new_attempts'][0]
             params['timestamp'] = new_verification_attempt['timestamp']
@@ -66,7 +67,9 @@ if __name__ == '__main__':
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
-            time.sleep(60)
 
     except ConnectionError:
+            time.sleep(60)
+    
+    except KeyError:
             time.sleep(60)
