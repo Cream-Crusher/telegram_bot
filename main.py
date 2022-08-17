@@ -7,13 +7,12 @@ import telegram
 from dotenv import load_dotenv
 
 
-async def main(new_attempts, token, chat_id_tg):
+def main(new_attempts, token, chat_id_tg):
     bot = telegram.Bot(token)
     result = get_work_result(new_attempts)
-
-    async with bot:
-        await bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
-            new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id_tg)
+    bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
+        new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id_tg
+        )
 
 
 def get_work_result(new_attempts):
@@ -49,7 +48,7 @@ if __name__ == '__main__':
             get_request_status(response_details)
             new_attempts = response_details['new_attempts'][0]
             params['timestamp'] = new_attempts['timestamp']
-            asyncio.run(main(new_attempts, token, chat_id_tg))
+            main(new_attempts, token, chat_id_tg)
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
