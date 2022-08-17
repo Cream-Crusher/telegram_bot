@@ -60,9 +60,9 @@ if __name__ == '__main__':
         while True:
             response_details = requests.get(url, headers=headers, params=params, timeout=60).json()
             get_request_status(response_details)
-            new_attempts = response_details['new_attempts'][0]
-            params['timestamp'] = new_attempts['timestamp']
-            main(new_attempts, token_tg, chat_id_tg)
+            new_verification_attempt = response_details['new_attempts'][0]
+            params['timestamp'] = new_verification_attempt['timestamp']
+            main(new_verification_attempt, token_tg, chat_id_tg)
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
