@@ -7,13 +7,13 @@ import telegram
 from dotenv import load_dotenv
 
 
-async def main(new_attempts, token, chat_id):
+async def main(new_attempts, token, chat_id_tg):
     bot = telegram.Bot(token)
     result = work_result(new_attempts)
 
     async with bot:
         await bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
-            new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id)
+            new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id_tg)
 
 
 def work_result(new_attempts):
@@ -26,7 +26,7 @@ def work_result(new_attempts):
 if __name__ == '__main__':
     load_dotenv()
     token = os.environ["TOKEN"]
-    chat_id = os.environ["CHAT_ID"]
+    chat_id_tg = os.environ["CHAT_ID_TG"]
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             response = requests.get(url, headers=headers, params=params, timeout=60).json()
             new_attempts = response['new_attempts'][0]
             params['timestamp'] = new_attempts['timestamp']
-            asyncio.run(main(new_attempts, token, chat_id))
+            asyncio.run(main(new_attempts, token, chat_id_tg))
 
     except requests.exceptions.ReadTimeout:
             time.sleep(60)
