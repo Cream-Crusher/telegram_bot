@@ -53,7 +53,7 @@ if __name__ == '__main__':
         }
 
     params = {
-        'timestamp': '1555493856',
+        'timestamp': time.time(),
         }
 
     try:
