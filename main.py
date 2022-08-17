@@ -9,18 +9,24 @@ from dotenv import load_dotenv
 
 async def main(new_attempts, token, chat_id_tg):
     bot = telegram.Bot(token)
-    result = work_result(new_attempts)
+    result = get_work_result(new_attempts)
 
     async with bot:
         await bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
             new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id_tg)
 
 
-def work_result(new_attempts):
-    if new_attempts['is_negative'] is True:
+def get_work_result(new_attempts):
+    if new_attempts['is_negative']:
         return 'Приступайте к следующему уроку'
     else:
         return 'В работе присутствуют ошибки'
+
+
+def get_request_status(response_details):
+
+    if response_details.get('error'):
+        raise requests.HTTPError(response_details['error']['error_code'])
 
 
 if __name__ == '__main__':
@@ -35,17 +41,18 @@ if __name__ == '__main__':
 
     params = {
         'timestamp': '1555493856',
-        'timeout': 1
         }
 
     try:
         while True:
-            response = requests.get(url, headers=headers, params=params, timeout=60).json()
-            new_attempts = response['new_attempts'][0]
+            response_details = requests.get(url, headers=headers, params=params, timeout=60).json()
+            get_request_status(response_details)
+            new_attempts = response_details['new_attempts'][0]
             params['timestamp'] = new_attempts['timestamp']
             asyncio.run(main(new_attempts, token, chat_id_tg))
 
     except requests.exceptions.ReadTimeout:
+            requests.get(url, headers=headers, params=params, timeout=0.001)
             time.sleep(60)
 
     except ConnectionError:
