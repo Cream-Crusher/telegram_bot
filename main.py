@@ -1,14 +1,14 @@
 import os
 import time
 import requests
-import asyncio
 import telegram
+import argparse
 
 from dotenv import load_dotenv
 
 
-def main(new_attempts, token, chat_id_tg):
-    bot = telegram.Bot(token)
+def main(new_attempts, token_tg, chat_id_tg):
+    bot = telegram.Bot(token_tg)
     result = get_work_result(new_attempts)
     bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
         new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id_tg
@@ -28,10 +28,24 @@ def get_request_status(response_details):
         raise requests.HTTPError(response_details['error']['error_code'])
 
 
+def get_args():
+    parser = argparse.ArgumentParser(description='Запуск телегарм бота')
+    parser.add_argument('token_tg', help='Введите TOKEN_TG', type=int)
+    parser.add_argument('chat_id_tg', help='Введите CHAT_ID_TG', type=int)
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == '__main__':
     load_dotenv()
-    token = os.environ["TOKEN"]
+    token_tg = os.environ["TOKEN_TG"]
     chat_id_tg = os.environ["CHAT_ID_TG"]
+
+    if token_tg == '' or chat_id_tg == '':
+        args = get_args()
+        token_tg = args.token_tg
+        chat_id_tg = args.chat_id_tg
+
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
@@ -48,7 +62,7 @@ if __name__ == '__main__':
             get_request_status(response_details)
             new_attempts = response_details['new_attempts'][0]
             params['timestamp'] = new_attempts['timestamp']
-            main(new_attempts, token, chat_id_tg)
+            main(new_attempts, token_tg, chat_id_tg)
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
