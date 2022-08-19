@@ -6,7 +6,7 @@
 
 * Скачайте код
 * Скачайте библиотеки ```pip install -r requirements.txt```
-* Заполните файл .env по образцу
+* Создайте и заполните файл .env по образцу
 ```python
 TG_TOKEN=Your tg token
 TG_CHAT_ID=Your tg chat id
