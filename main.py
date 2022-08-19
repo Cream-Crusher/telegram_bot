@@ -30,22 +30,17 @@ def get_request_status(response_details):
 
 def get_args():
     parser = argparse.ArgumentParser(description='Запуск телегарм бота')
-    parser.add_argument('token_tg', help='Введите TOKEN_TG', type=int)
-    parser.add_argument('chat_id_tg', help='Введите CHAT_ID_TG', type=int)
+    parser.add_argument('--token_tg', default=os.environ["TOKEN_TG"], help='Введите TOKEN_TG')
+    parser.add_argument('--chat_id_tg', default=os.environ["CHAT_ID_TG"], help='Введите CHAT_ID_TG')
     args = parser.parse_args()
     return args
 
 
 if __name__ == '__main__':
     load_dotenv()
-    token_tg = os.environ["TOKEN_TG"]
-    chat_id_tg = os.environ["CHAT_ID_TG"]
-
-    if token_tg == '' or chat_id_tg == '':
-        args = get_args()
-        token_tg = args.token_tg
-        chat_id_tg = args.chat_id_tg
-
+    args = get_args()
+    token_tg = args.token_tg
+    chat_id_tg = args.chat_id_tg
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
