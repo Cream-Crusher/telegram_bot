@@ -7,11 +7,11 @@ import argparse
 from dotenv import load_dotenv
 
 
-def main(new_attempts, token_tg, chat_id_tg):
-    bot = telegram.Bot(token_tg)
+def main(new_attempts, tg_token, tg_chat_id):
+    bot = telegram.Bot(tg_token)
     result = get_work_result(new_attempts)
     bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
-        new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=chat_id_tg
+        new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=tg_chat_id
         )
 
 
@@ -30,8 +30,8 @@ def get_request_status(response_details):
 
 def get_args():
     parser = argparse.ArgumentParser(description='Запуск телегарм бота')
-    parser.add_argument('--token_tg', default=os.environ["TOKEN_TG"], help='Введите TOKEN_TG')
-    parser.add_argument('--chat_id_tg', default=os.environ["CHAT_ID_TG"], help='Введите CHAT_ID_TG')
+    parser.add_argument('--tg_token', default=os.environ["TG_TOKEN"], help='Введите TG_TOKEN')
+    parser.add_argument('--tg_chat_id', default=os.environ["TG_CHAT_ID"], help='Введите TG_CHAT_ID')
     args = parser.parse_args()
     return args
 
@@ -39,8 +39,8 @@ def get_args():
 if __name__ == '__main__':
     load_dotenv()
     args = get_args()
-    token_tg = args.token_tg
-    chat_id_tg = args.chat_id_tg
+    tg_token = args.tg_token
+    tg_chat_id = args.tg_chat_id
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
@@ -57,7 +57,7 @@ if __name__ == '__main__':
             get_request_status(response_details)
             new_verification_attempt = response_details['new_attempts'][0]
             params['timestamp'] = new_verification_attempt['timestamp']
-            main(new_verification_attempt, token_tg, chat_id_tg)
+            main(new_verification_attempt, tg_token, tg_chat_id)
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
