@@ -22,16 +22,11 @@ def get_work_result(new_attempts):
         return 'В работе присутствуют ошибки'
 
 
-def get_request_status(response_details):
-
-    if response_details.get('error'):
-        raise requests.HTTPError(response_details['error']['error_code'])
-
-
 def get_args():
     parser = argparse.ArgumentParser(description='Запуск телегарм бота')
     parser.add_argument('--tg_token', default=os.environ["TG_TOKEN"], help='Введите TG_TOKEN')
     parser.add_argument('--tg_chat_id', default=os.environ["TG_CHAT_ID"], help='Введите TG_CHAT_ID')
+    parser.add_argument('--devman_token', default=os.environ["DEVMAN_TOKEN"], help='Введите DEVMAN_TOKEN')
     args = parser.parse_args()
     return args
 
@@ -41,10 +36,11 @@ if __name__ == '__main__':
     args = get_args()
     tg_token = args.tg_token
     tg_chat_id = args.tg_chat_id
+    devman_token = args.devman_token
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
-        'Authorization': 'Token ee17a19ea5ed9a5817e85ff4374211f78de8fc63'
+        'Authorization': 'Token {}'.format(devman_token)
         }
 
     params = {
@@ -54,7 +50,7 @@ if __name__ == '__main__':
     try:
         while True:
             response_details = requests.get(url, headers=headers, params=params, timeout=60).json()
-            get_request_status(response_details)
+            response_details.raise_for_status()
             new_verification_attempt = response_details['new_attempts'][0]
             params['timestamp'] = new_verification_attempt['timestamp']
             main(new_verification_attempt, tg_token, tg_chat_id)
