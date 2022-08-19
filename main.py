@@ -7,7 +7,7 @@ import argparse
 from dotenv import load_dotenv
 
 
-def main(new_attempts, tg_token, tg_chat_id):
+def launch_tel_bot(new_attempts, tg_token, tg_chat_id):
     bot = telegram.Bot(tg_token)
     result = get_work_result(new_attempts)
     bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             response_details.raise_for_status()
             new_verification_attempt = response_details['new_attempts'][0]
             params['timestamp'] = new_verification_attempt['timestamp']
-            main(new_verification_attempt, tg_token, tg_chat_id)
+            launch_tel_bot(new_verification_attempt, tg_token, tg_chat_id)
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
