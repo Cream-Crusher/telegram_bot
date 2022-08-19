@@ -8,23 +8,26 @@
 * Скачайте библиотеки ```pip install -r requirements.txt```
 * Заполните файл .env по образцу
 ```python
-.env
-
-TOKEN=Your token
-CHAT_ID=Your chat id
+TG_TOKEN=Your tg token
+TG_CHAT_ID=Your tg chat id
+DEVMAN_TOKEN=Your devman token
 ```
+DEVMAN_TOKEN можно узнать здесь [devman token](https://dvmn.org/api/docs/)
+
 ##### или
 * Запустите код с использованием параметров argparse
 
- --token_tg = Токен телеграмма
+ --tg_token = Токен телеграмма
  
- --chat_id_tg = Токен чата телеграмма
+ --tg_chat_id = Токен чата телеграмма
+ 
+ --devman_token= Токен devman
  
  example:
 ```python
-$ python main.py --token_tg 123:qwe chat_id_tg 123
+$ python main.py --tg_token 123:qwe --tg_chat_id 123 --devman_token q1w2e3
 ```
 
 
-* Запустите сайт командой ```python3 main.py``` или ```python main.py --token_tg 123:qwe chat_id_tg 123```
+* Запустите сайт командой ```python3 main.py``` или ```python main.py --tg_token 123:qwe --tg_chat_id 123 --devman_token q1w2e3```
 * Зайдите в telegram
