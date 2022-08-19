@@ -49,17 +49,20 @@ if __name__ == '__main__':
 
     try:
         while True:
-            response_details = requests.get(url, headers=headers, params=params, timeout=60).json()
-            response_details.raise_for_status()
+            response = requests.get(url, headers=headers, params=params, timeout=60)
+            response.raise_for_status()
+            response_details = response.json()
             new_verification_attempt = response_details['new_attempts'][0]
-            params['timestamp'] = new_verification_attempt['timestamp']
+
+            if response_details['status'] == 'found':
+                params['timestamp'] = new_verification_attempt['timestamp']
+            else:
+                pass
+
             launch_tel_bot(new_verification_attempt, tg_token, tg_chat_id)
 
     except requests.exceptions.ReadTimeout:
             requests.get(url, headers=headers, params=params, timeout=0.001)
 
     except ConnectionError:
-            time.sleep(60)
-    
-    except KeyError:
             time.sleep(60)
