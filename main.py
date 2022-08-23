@@ -47,8 +47,8 @@ if __name__ == '__main__':
         'timestamp': time.time(),
         }
 
-    try:
-        while True:
+    while True:
+        try:
             response = requests.get(url, headers=headers, params=params, timeout=60)
             response.raise_for_status()
             response_details = response.json()
@@ -61,8 +61,8 @@ if __name__ == '__main__':
 
             send_notification_tel(new_verification_attempt, tg_token, tg_chat_id)
 
-    except requests.exceptions.ReadTimeout:
-            requests.get(url, headers=headers, params=params, timeout=0.001)
+        except requests.exceptions.ReadTimeout:
+                requests.get(url, headers=headers, params=params, timeout=0.001)
 
-    except ConnectionError:
-            time.sleep(60)
+        except ConnectionError:
+                time.sleep(60)
