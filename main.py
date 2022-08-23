@@ -52,12 +52,12 @@ if __name__ == '__main__':
             response = requests.get(url, headers=headers, params=params, timeout=60)
             response.raise_for_status()
             response_details = response.json()
-            new_verification_attempt = response_details['new_attempts'][0]
 
             if response_details['status'] == 'found':
+                new_verification_attempt = response_details['new_attempts'][0]
                 params['timestamp'] = new_verification_attempt['timestamp']
             else:
-                pass
+                params['timestamp'] = time.time()
 
             launch_tel_bot(new_verification_attempt, tg_token, tg_chat_id)
 
