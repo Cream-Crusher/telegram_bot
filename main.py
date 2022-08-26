@@ -56,10 +56,9 @@ if __name__ == '__main__':
             if response_details['status'] == 'found':
                 new_verification_attempt = response_details['new_attempts'][0]
                 params['timestamp'] = new_verification_attempt['timestamp']
+                send_notification_tel(new_verification_attempt, tg_token, tg_chat_id)
             else:
                 params['timestamp'] = time.time()
-
-            send_notification_tel(new_verification_attempt, tg_token, tg_chat_id)
 
         except requests.exceptions.ReadTimeout:
                 requests.get(url, headers=headers, params=params, timeout=0.001)
