@@ -2,6 +2,7 @@ import os
 import time
 import requests
 import telegram
+import argparse
 
 from dotenv import load_dotenv
 
@@ -21,11 +22,21 @@ def get_work_result(new_attempts):
         return 'В работе присутствуют ошибки'
 
 
+def get_args():
+    parser = argparse.ArgumentParser(description='Запуск телегарм бота')
+    parser.add_argument('--tg_token', default=os.environ["TG_TOKEN"], help='Введите TG_TOKEN')
+    parser.add_argument('--tg_chat_id', default=os.environ["TG_CHAT_ID"], help='Введите TG_CHAT_ID')
+    parser.add_argument('--devman_token', default=os.environ["DEVMAN_TOKEN"], help='Введите DEVMAN_TOKEN')
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == '__main__':
     load_dotenv()
-    tg_token = os.environ["TG_TOKEN"]
-    tg_chat_id = os.environ["TG_CHAT_ID"]
-    devman_token = os.environ["DEVMAN_TOKEN"]
+    args = get_args()
+    tg_token = args.tg_token
+    tg_chat_id = args.tg_chat_id
+    devman_token = args.devman_token
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
