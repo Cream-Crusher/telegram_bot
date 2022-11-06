@@ -14,6 +14,7 @@ def send_notification_tel(new_attempts, tg_token, tg_chat_id):
     bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
         new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=tg_chat_id
         )
+    logging.info('Бот отправил сообщение')
 
 
 def get_work_result(new_attempts):
@@ -35,7 +36,7 @@ def get_args():
 if __name__ == '__main__':
     load_dotenv()
     logging.basicConfig(level=logging.INFO)
-    logging.INFO('Бот запущен')
+    logging.info('Бот запущен')
     args = get_args()
     tg_token = args.tg_token
     tg_chat_id = args.tg_chat_id
