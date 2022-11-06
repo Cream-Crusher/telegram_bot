@@ -3,6 +3,7 @@ import time
 import requests
 import telegram
 import argparse
+import logging
 
 from dotenv import load_dotenv
 
@@ -33,6 +34,8 @@ def get_args():
 
 if __name__ == '__main__':
     load_dotenv()
+    logging.basicConfig(level=logging.INFO)
+    logging.INFO('Бот запущен')
     args = get_args()
     tg_token = args.tg_token
     tg_chat_id = args.tg_chat_id
