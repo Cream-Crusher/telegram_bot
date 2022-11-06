@@ -8,8 +8,13 @@ from dotenv import load_dotenv
 
 
 def send_notification_tel(new_attempts, tg_token, tg_chat_id):
+    print('вывод токенов в функции')
     print(tg_token)
+    print(tg_chat_id)
     bot = telegram.Bot(tg_token)
+    print('вывод токенов после использования 1-го токена')
+    print(tg_token)
+    print(tg_chat_id)
     result = get_work_result(new_attempts)
     bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
         new_attempts['lesson_title'], result, new_attempts['lesson_url']), chat_id=tg_chat_id
@@ -40,7 +45,7 @@ if __name__ == '__main__':
     devman_token = args.devman_token
 
 
-
+    print('вывод токенов в майне')
     print(tg_token)
     print(tg_chat_id)
     print(devman_token)
