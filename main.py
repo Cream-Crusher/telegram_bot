@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 
 def send_notification_tel(new_attempts, tg_token, tg_chat_id):
+    print(tg_token)
     bot = telegram.Bot(tg_token)
     result = get_work_result(new_attempts)
     bot.send_message(text='У вас была проверена работа "{}" \n {} \n {}'.format(
