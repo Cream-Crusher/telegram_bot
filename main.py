@@ -37,6 +37,14 @@ if __name__ == '__main__':
     tg_token = args.tg_token
     tg_chat_id = args.tg_chat_id
     devman_token = args.devman_token
+
+
+
+    print(tg_token)
+    print(tg_chat_id)
+    print(devman_token)
+
+
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {
