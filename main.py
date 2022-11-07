@@ -92,4 +92,8 @@ if __name__ == '__main__':
                 requests.get(url, headers=headers, params=params, timeout=0.001)
 
         except ConnectionError:
+                logger.exception(ConnectionError+'\nPlease wait one minute')
                 time.sleep(60)
+
+        except Exception as err:
+            logger.exception(err)
