@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 from logging.handlers import RotatingFileHandler
 
 
+logger = logging.getLogger(__file__)
+
+
 class TelegramLogsHandler(logging.Handler):
 
     def __init__(self, tg_bot, chat_id):
@@ -19,12 +22,6 @@ class TelegramLogsHandler(logging.Handler):
     def emit(self, record):
         log_entry = self.format(record)
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
-
-
-class Bot_tel:
-
-    def __init__(self, tg_token):
-        self.bot = telegram.Bot(tg_token)
 
 
 def send_notification_tel(new_attempts, bot, tg_chat_id):
@@ -58,9 +55,8 @@ if __name__ == '__main__':
     tg_chat_id = args.tg_chat_id
     devman_token = args.devman_token
     url = 'https://dvmn.org/api/long_polling/'
-    tg_bot = Bot_tel(tg_token).bot
+    tg_bot = telegram.Bot(tg_token)
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger('Logger')
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramLogsHandler(tg_bot, tg_chat_id))
     handler = RotatingFileHandler("app.log", maxBytes=2000, backupCount=2)
@@ -77,19 +73,17 @@ if __name__ == '__main__':
 
     while True:
         try:
+            time.sleep(60)
             response = requests.get(url, headers=headers, params=params, timeout=60)
             response.raise_for_status()
-            response_details = response.json()
+            code_review_details = response.json()
 
-            if response_details['status'] == 'found':
-                new_verification_attempt = response_details['new_attempts'][0]
+            if code_review_details['status'] == 'found':
+                new_verification_attempt = code_review_details['new_attempts'][0]
                 params['timestamp'] = new_verification_attempt['timestamp']
                 send_notification_tel(new_verification_attempt, tg_bot, tg_chat_id)
             else:
                 params['timestamp'] = time.time()
-
-        except requests.exceptions.ReadTimeout:
-                requests.get(url, headers=headers, params=params, timeout=0.001)
 
         except ConnectionError:
                 logger.exception(ConnectionError+'\nPlease wait one minute')
