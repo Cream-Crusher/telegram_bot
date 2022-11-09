@@ -86,8 +86,8 @@ if __name__ == '__main__':
                 params['timestamp'] = time.time()
 
         except ConnectionError:
-                logger.exception(ConnectionError+'\nPlease wait one minute')
-                time.sleep(60)
+            logger.exception(ConnectionError+'\nPlease wait one minute')
+            time.sleep(60)
 
         except Exception as err:
             logger.exception(err)
