@@ -73,15 +73,16 @@ if __name__ == '__main__':
 
     while True:
         try:
-            time.sleep(60)
             response = requests.get(url, headers=headers, params=params, timeout=60)
             response.raise_for_status()
             code_review_details = response.json()
 
             if code_review_details['status'] == 'found':
-                new_verification_attempt = code_review_details['new_attempts'][0]
-                params['timestamp'] = new_verification_attempt['timestamp']
-                send_notification_tel(new_verification_attempt, tg_bot, tg_chat_id)
+                new_verification_attempt = code_review_details['new_attempts']
+
+                for new_verification_attempt in new_verification_attempt:
+                    params['timestamp'] = new_verification_attempt['timestamp']
+                    send_notification_tel(new_verification_attempt, tg_bot, tg_chat_id)
             else:
                 params['timestamp'] = time.time()
 
