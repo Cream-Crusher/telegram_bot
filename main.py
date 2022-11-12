@@ -82,7 +82,6 @@ if __name__ == '__main__':
                 params['timestamp'] = new_verification_attempt['timestamp']
                 send_notification_tel(new_verification_attempt, tg_bot, tg_chat_id)
 
-
         except ConnectionError:
             logger.exception(ConnectionError+'\nPlease wait one minute')
             time.sleep(60)
